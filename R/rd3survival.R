@@ -1,6 +1,6 @@
-#' <Add Title>
+#' rd3survival
 #'
-#' <Add Description>
+#' Plot a survival fit (single or stratified)
 #'
 #' @import htmlwidgets
 #'
