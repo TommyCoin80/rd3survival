@@ -1,0 +1,13 @@
+path.estimate {
+    fill:none;
+    stroke:steelblue;
+}
+
+path.confidence {
+    fill:steelblue;
+    fill-opacity:.35;
+}
+
+.axis text {
+    font-family: 'Consolas';
+}

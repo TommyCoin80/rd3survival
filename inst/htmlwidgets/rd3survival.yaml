@@ -1,0 +1,13 @@
+dependencies:
+  - name: D3
+    version: 5.5.0 
+    src: htmlwidgets/lib/d3-5.5.0
+    script: d3.min.js
+  - name: d3Survival
+    version: 0.1
+    src: htmlwidgets/lib/d3Survival-0.1
+    script: d3Survival.js
+  - name: d3SurvivalCSS
+    version: 0.1
+    src: htmlwidgets/lib/d3Survival-0.1/CSS
+    stylesheet: d3SurvivalStyle.css
