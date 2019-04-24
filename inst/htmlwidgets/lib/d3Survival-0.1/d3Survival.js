@@ -4,11 +4,25 @@ d3.survival = function(data) {
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom,
     svg;
-    
+
+  function nestData(data) {
+    if(data[0].strata != undefined) {
+      var nest = d3.nest()
+        .key(function(d) { return d.strata})
+        .entries(data);
+    } else {
+      var nest = [{key:'series', values:data}];
+    }
+    return(nest)
+  }
+
+
   var f = function(context) {
     // draw the graph
     context.selectAll('*').remove(); // remove old graphs
     
+    var nest = nestData(data);
+
     svg = context.append('svg')
       .attr('width','100%')
       .attr('height','100%')
@@ -17,6 +31,9 @@ d3.survival = function(data) {
       .attr('transform','translate(' + margin.left + ',' + margin.top + ')')
 
     // "time"      "n.risk"    "n.event"   "n.censor"  "estimate"  "std.error" "conf.high" "conf.low" 
+
+    var color = d3.scaleOrdinal(d3.schemeCategory10)
+      .domain(d3.map(nest, function(d) { return d.key}))
 
     var x = d3.scaleLinear()
       .domain(d3.extent(data, function(d) { return d['time']}))
@@ -53,18 +70,20 @@ d3.survival = function(data) {
 
 
     svg.selectAll('.estimate')
-      .data([data])
+      .data(nest)
       .enter()
       .append('path')
       .classed('estimate',true)
-      .attr('d', line);
+      .attr('d', function(d) { return line(d.values)})
+      .style('stroke', function(d) { return color(d.key)});
 
     svg.selectAll('.confidence')
-      .data([data])
+      .data(nest)
       .enter()
       .append('path')
       .classed('confidence',true)
-      .attr('d',area);
+      .attr('d', function(d) { return area(d.values)})
+      .style('fill', function(d) { return color(d.key)});
     
 
   }
