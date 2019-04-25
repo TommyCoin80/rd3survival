@@ -58,6 +58,12 @@ d3.survival = function(data) {
     svg.append('g')
       .classed('axis', true)
       .call(yAxis)
+      
+    svg.append('clipPath')
+      .attr('id', 'limit-clip')
+      .append('rect')
+      .attr('height', height)
+      .attr('width', width)
     
     var line = d3.line()
       .x(function(d) { return x(d.time)})
@@ -73,6 +79,7 @@ d3.survival = function(data) {
       .data(nest)
       .enter()
       .append('path')
+      .attr('clip-path','url(#limit-clip)')
       .classed('estimate',true)
       .attr('d', function(d) { return line(d.values)})
       .style('stroke', function(d) { return color(d.key)});
@@ -81,6 +88,7 @@ d3.survival = function(data) {
       .data(nest)
       .enter()
       .append('path')
+      .attr('clip-path','url(#limit-clip)')
       .classed('confidence',true)
       .attr('d', function(d) { return area(d.values)})
       .style('fill', function(d) { return color(d.key)});
