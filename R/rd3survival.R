@@ -5,17 +5,24 @@
 #' @import htmlwidgets
 #'
 #' @export
-rd3survival <- function(sf, width = NULL, height = NULL, elementId = NULL) {
+rd3survival <- function(sf, xlim = NULL, width = NULL, height = NULL, elementId = NULL) {
   
-  prepData <- function(sf) {
+  library(magrittr)
+  library(dplyr)
+  library(broom)
+  
+  prepData <- function(sf,xlim) {
     tsf <- broom::tidy(sf)
+    if(length(xlim) == 2) {
+      tsf <- tsf %>% filter(time >= xlim[1] & time <= xlim[2])
+    }
     jsonlite::toJSON(tsf)
   }
 
   
   # forward options using x
   x = list(
-    data = prepData(sf)
+    data = prepData(sf,xlim)
   )
 
   # create widget
