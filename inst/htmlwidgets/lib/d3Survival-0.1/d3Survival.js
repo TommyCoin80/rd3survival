@@ -1,19 +1,31 @@
 d3.survival = function(message) {
   
+  tester = message;
+  
   var margin = {top:10,left:50,bottom:50,right:40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom,
+    xlim = valPropLen(message.options,'xlim'),
+    ylim = valPropLen(message.options,'ylim'),
     svg;
 
+
+  function valPropLen(obj, prop, len) {
+    len = len || 2;
+    return obj[prop] && obj[prop].length == len ? obj[prop] : null;
+  } 
+
+  
   function nestData(data) {
-    if(data[0].strata != undefined) {
-      var nest = d3.nest()
+    var nest;
+    if(data[0].strata !== undefined) {
+      nest = d3.nest()
         .key(function(d) { return d.strata})
         .entries(data);
     } else {
-      var nest = [{key:'series', values:data}];
+      nest = [{key:'series', values:data}];
     }
-    return(nest)
+    return nest;
   }
   
   var f = function(context) {
@@ -36,12 +48,12 @@ d3.survival = function(message) {
       .domain(d3.map(nest, function(d) { return d.key}))
 
     var x = d3.scaleLinear()
-      .domain(message.xlim || d3.extent(message.data, function(d) { return d['time']}))
+      .domain(xlim || d3.extent(message.data, function(d) { return d['time']}))
       .range([0,width])
       .nice();
 
     var y = d3.scaleLinear()
-      .domain(message.ylim || [d3.min(message.data, function(d) { return d['conf.low']}), d3.max(message.data, function(d) { return d["conf.high"]})])
+      .domain(ylim|| [d3.min(message.data, function(d) { return d['conf.low']}), d3.max(message.data, function(d) { return d["conf.high"]})])
       .range([height,0])
       .nice();
 

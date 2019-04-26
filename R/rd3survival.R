@@ -5,7 +5,7 @@
 #' @import htmlwidgets
 #'
 #' @export
-rd3survival <- function(sf, xlim = NULL, ylim = NULL,  width = NULL, height = NULL, elementId = NULL) {
+rd3survival <- function(sf, opts = list(),  width = NULL, height = NULL, elementId = NULL) {
   
   library(magrittr)
   library(dplyr)
@@ -16,20 +16,10 @@ rd3survival <- function(sf, xlim = NULL, ylim = NULL,  width = NULL, height = NU
     jsonlite::toJSON(tsf)
   }
   
-  if(length(xlim) != 2)  {
-    xlim <- NULL
-  }
-  
-  if(length(ylim) != 2)  {
-    ylim <- NULL
-  }
-
-  
   # forward options using x
   x = list(
     data = prepData(sf),
-    xlim = xlim,
-    ylim = ylim
+    options = opts
   )
 
   # create widget
