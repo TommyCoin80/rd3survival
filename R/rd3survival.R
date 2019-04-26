@@ -1,6 +1,6 @@
 #' rd3survival
 #'
-#' Plot a survival fit (single or stratified)
+#' Plot a survival fit, single or stratified
 #'
 #' @import htmlwidgets
 #'
@@ -11,22 +11,25 @@ rd3survival <- function(sf, xlim = NULL, ylim = NULL,  width = NULL, height = NU
   library(dplyr)
   library(broom)
   
-  prepData <- function(sf,xlim, ylim) {
+  prepData <- function(sf) {
     tsf <- broom::tidy(sf)
-    if(length(xlim) == 2) {
-      tsf <- tsf %>% filter(time >= xlim[1] & time <= xlim[2])
-    }
-    
-    if(length(ylim) == 2) {
-      tsf <- tsf %>% filter(conf.high >= ylim[1] & conf.low <= ylim[2])
-    }
     jsonlite::toJSON(tsf)
+  }
+  
+  if(length(xlim) != 2)  {
+    xlim <- NULL
+  }
+  
+  if(length(ylim) != 2)  {
+    ylim <- NULL
   }
 
   
   # forward options using x
   x = list(
-    data = prepData(sf,xlim,ylim)
+    data = prepData(sf),
+    xlim = xlim,
+    ylim = ylim
   )
 
   # create widget

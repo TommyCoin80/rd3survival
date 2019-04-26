@@ -1,4 +1,4 @@
-d3.survival = function(data) {
+d3.survival = function(message) {
   
   var margin = {top:10,left:50,bottom:50,right:40},
     width = 960 - margin.left - margin.right,
@@ -15,13 +15,12 @@ d3.survival = function(data) {
     }
     return(nest)
   }
-
-
+  
   var f = function(context) {
     // draw the graph
     context.selectAll('*').remove(); // remove old graphs
     
-    var nest = nestData(data);
+    var nest = nestData(message.data);
 
     svg = context.append('svg')
       .attr('width','100%')
@@ -30,18 +29,19 @@ d3.survival = function(data) {
       .append('g')
       .attr('transform','translate(' + margin.left + ',' + margin.top + ')')
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     // "time"      "n.risk"    "n.event"   "n.censor"  "estimate"  "std.error" "conf.high" "conf.low" 
 
     var color = d3.scaleOrdinal(d3.schemeCategory10)
       .domain(d3.map(nest, function(d) { return d.key}))
 
     var x = d3.scaleLinear()
-      .domain(d3.extent(data, function(d) { return d['time']}))
+      .domain(message.xlim || d3.extent(message.data, function(d) { return d['time']}))
       .range([0,width])
       .nice();
 
     var y = d3.scaleLinear()
-      .domain([d3.min(data, function(d) { return d['conf.low']}), d3.max(data, function(d) { return d["conf.high"]})])
+      .domain(message.ylim || [d3.min(message.data, function(d) { return d['conf.low']}), d3.max(message.data, function(d) { return d["conf.high"]})])
       .range([height,0])
       .nice();
 

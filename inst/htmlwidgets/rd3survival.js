@@ -14,7 +14,7 @@ HTMLWidgets.widget({
 
         // TODO: code to render the widget, e.g.
         //el.innerText = x.message;
-        var surv = d3.survival(x.data)
+        var surv = d3.survival(x)
         
         d3.select(el).call(surv);
         
