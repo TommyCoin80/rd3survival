@@ -8,6 +8,29 @@ path.confidence {
     fill-opacity:.35;
 }
 
-.axis text {
+svg .axis text, svg text {
     font-family: 'Consolas';
+}
+
+svg {
+    background-color: #232b2b;
+}
+
+svg text {
+    fill: #e9e9e9
+}
+
+
+svg .axis path, svg .axis line {
+    stroke: #e9e9e9;
+}
+
+
+svg .grid .domain, .grid text {
+    display:none;
+}
+
+svg .grid path, svg .grid line {
+    stroke: #e9e9e9;
+    opacity:.1;
 }
