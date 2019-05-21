@@ -1,6 +1,6 @@
 d3.survival = function(message) {
   
-  var margin = {top:10,left:75,bottom:50,right:40},
+  var margin = {top:30,left:75,bottom:50,right:40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom,
     xlim = valPropLen(message.options,'xlim'),
@@ -80,12 +80,14 @@ d3.survival = function(message) {
     
     var line = d3.line()
       .x(function(d) { return x(d.time)})
-      .y(function(d) { return y(d.estimate)});
+      .y(function(d) { return y(d.estimate)})
+      .curve(d3.curveStepAfter)
 
     var area = d3.area()
       .x(function(d) { return x(d.time)})
       .y0(function(d) { return y(d['conf.low'])})
-      .y1(function(d) { return y(d['conf.high'])});
+      .y1(function(d) { return y(d['conf.high'])})
+      .curve(d3.curveStepAfter);
       
       
     svg.append('g')
@@ -158,7 +160,9 @@ d3.survival = function(message) {
         if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return;
 
         var s = arrangeSelection(d3.event.selection || [[0,0],[0,0]]);
-
+        
+        console.log(s)
+        
         if(d3.sum(flatten(s)) > 0) {
             lastExtent = s;
             zoomChart([x.invert(s[0][0]),x.invert(s[1][0])], [y.invert(s[0][1]),y.invert(s[1][1])])
